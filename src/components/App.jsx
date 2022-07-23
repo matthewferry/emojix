@@ -1,49 +1,79 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import background from '../assets/back.jpg';
-import Emoji from './Emoji';
-import EmojiBubble from './EmojiBubble';
-import Github from './Github';
+import * as React from 'react';
+import styled, { createGlobalStyle } from 'styled-components';
+import GatheroundDisplayWoff from '../assets/GatheroundDisplay.woff';
+import GatheroundDisplayWoff2 from '../assets/GatheroundDisplay.woff2';
+import StageVideo from '../assets/StageVideo.webm';
+import TopBar from './TopBar';
+import BottomBar from './BottomBar';
+import { Tldraw } from '@tldraw/tldraw';
+
+const FontStyles = createGlobalStyle`
+	@font-face {
+		font-family: 'Gatheround Display';
+		src: url(${GatheroundDisplayWoff2}) format('woff2'),
+			url(${GatheroundDisplayWoff}) format('woff');
+	}
+`;
 
 const StyledApp = styled.div`
 	min-height: 100vh;
 	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	align-items: center;
+`;
+
+const StyledStage = styled.div`
+	border-bottom: 1px solid #E1E1E0;
+	width: 100%;
+	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-	background: url(${background}) center;
-	background-size: contain;
+`;
+
+const StyledCanvasWrapper = styled.div`
+	border-top: 1px solid #E1E1E0;
+	position: relative;
+	width: 100%;
+	height: 500px;
+	overflow: hidden;
+`;
+
+const StyledVideoWrapper = styled.div`
+	width: 270px;
+	height: 270px;
+	overflow: hidden;
+	position: relative;
+	border-radius: 24px;
+	transform: rotate(-3deg);
+	margin:16px 0 36px;
+
+	video {
+		height: 100%;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate3d(-50%, -50%, 0);
+	}
 `;
 
 function App() {
-	const emojiList = ['👏', '💩', '😂', '😡', '👽'];
-
-	const [emojiQueue, setEmojiQueue] = useState([]);
-
-	const randomSize = (min, max) =>
-		(Math.random() * (max - min + 1) + min).toFixed(2);
-
-	const randomLeft = () => Math.floor(Math.random() * 97 + 1);
-
-	const handleClick = emoji => {
-		setEmojiQueue(prevState => [
-			...prevState,
-			{ emoji, size: randomSize(2.2, 4.1), left: randomLeft() }
-		]);
-	};
-
-	const emojiMarkup = emojiList.map((emoji, i) => (
-		<Emoji key={i} emoji={emoji} handleClick={handleClick} />
-	));
-
-	const emojiBubbleMarkup = emojiQueue.map((emojiVals, i) => (
-		<EmojiBubble key={i} {...emojiVals} />
-	));
-
 	return (
 		<>
-			<StyledApp>{emojiMarkup}</StyledApp>
-			{emojiBubbleMarkup}
-			<Github />
+			<FontStyles />
+			<StyledApp>
+				<TopBar />
+				<StyledStage>
+					<StyledVideoWrapper>
+						<video src={StageVideo} autoPlay loop muted playsInline />
+					</StyledVideoWrapper>
+					<StyledCanvasWrapper>
+						<Tldraw />
+					</StyledCanvasWrapper>
+				</StyledStage>
+				<BottomBar />
+			</StyledApp>
 		</>
 	);
 }
