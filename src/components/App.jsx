@@ -5,7 +5,7 @@ import GatheroundDisplayWoff2 from '../assets/GatheroundDisplay.woff2';
 import StageVideo from '../assets/StageVideo.webm';
 import TopBar from './TopBar';
 import BottomBar from './BottomBar';
-import { Tldraw } from '@tldraw/tldraw';
+import { Tldraw, useFileSystem } from '@tldraw/tldraw';
 
 const FontStyles = createGlobalStyle`
 	@font-face {
@@ -24,16 +24,17 @@ const StyledApp = styled.div`
 `;
 
 const StyledStage = styled.div`
-	border-bottom: 1px solid #E1E1E0;
 	width: 100%;
 	display: flex;
+	flex: 1 auto;
 	flex-direction: column;
-	justify-content: center;
+	// justify-content: center;
 	align-items: center;
 `;
 
 const StyledCanvasWrapper = styled.div`
 	border-top: 1px solid #E1E1E0;
+	border-bottom: 1px solid #E1E1E0;
 	position: relative;
 	width: 100%;
 	height: 500px;
@@ -41,6 +42,7 @@ const StyledCanvasWrapper = styled.div`
 `;
 
 const StyledVideoWrapper = styled.div`
+	border-bottom: 1px solid #E1E1E0;
 	width: 270px;
 	height: 270px;
 	overflow: hidden;
@@ -64,14 +66,25 @@ function App() {
 			<FontStyles />
 			<StyledApp>
 				<TopBar />
-				<StyledStage>
-					<StyledVideoWrapper>
-						<video src={StageVideo} autoPlay loop muted playsInline />
-					</StyledVideoWrapper>
-					<StyledCanvasWrapper>
-						<Tldraw />
-					</StyledCanvasWrapper>
-				</StyledStage>
+					<StyledStage>
+						<div style={{borderBottom: '1px solid #E1E1E0', display: 'inline-flex', justifyContent: 'center', width: '100%'}}>
+							<StyledVideoWrapper>
+								<video src={StageVideo} autoPlay loop muted playsInline />
+							</StyledVideoWrapper>
+						</div>
+						
+						{/*
+						<StyledCanvasWrapper>
+							<div className='tldraw'>
+								<Tldraw 
+									autofocus
+									disableAssets
+									showPages={false}
+								/>
+							</div>
+						</StyledCanvasWrapper>
+						*/}
+					</StyledStage>
 				<BottomBar />
 			</StyledApp>
 		</>
